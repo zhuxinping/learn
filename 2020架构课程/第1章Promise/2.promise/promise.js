@@ -26,7 +26,7 @@ const REJECTED = 'REJECTED';
 //     }
 // })
 //判断x是让promise2变成功还是失败
-function resolvePromise(promise2,resolve,reject) {
+function resolvePromise(promise2,x,resolve,reject) {
     //此方法为了兼容所有的promise
     //1)不能引用同一个对象
     if(promise2 === x){
@@ -39,7 +39,8 @@ function resolvePromise(promise2,resolve,reject) {
             let then = x.then;
             if(typeof then === 'function'){// promise
                 then.call(x,(y)=>{ //then只取依次
-                    resolve(y);
+                    // resolve(y);
+                    resolvePromise(promise2,x,resolve,reject)
                 },(r)=>{
                     reject(r);
                 })
