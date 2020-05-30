@@ -20,6 +20,43 @@
 const PENDING = 'PENDING';
 const RESOLVED = 'RESOLVED';
 const REJECTED = 'REJECTED';
+// Object.defineProperty(promise,'then',{
+//     get(){
+//         throw Error('错误')
+//     }
+// })
+//判断x是让promise2变成功还是失败
+function resolvePromise(promise2,resolve,reject) {
+    //此方法为了兼容所有的promise
+    //1)不能引用同一个对象
+    if(promise2 === x){
+        return reject(new TypeError('Chaining cycle detected for promise #<Promise>--'))
+    }
+    //2)判断x类型
+    //如果是对象或函数 说明有可能是一个promise
+    if((typeof x === 'object' && x!=null) || typeof x === 'function'){
+        try {
+            let then = x.then;
+            if(typeof then === 'function'){// promise
+                then.call(x,(y)=>{ //then只取依次
+                    resolve(y);
+                },(r)=>{
+                    reject(r);
+                })
+            }else{
+                // {a:1,then:1}
+                resolve(x);
+            }
+        } catch (e) {
+            reject(e);
+        }
+
+    }else{//普通值直接resolve成功
+        resolve(x);
+    }
+}
+// resolve一执行 就会执行then方法里面的回调
+//onfulfilled   onrejected 要用异步去执行，延迟执行 才可以拿到promise2实例
 class Promise{
     constructor(executor){//宏变量
         this.status = PENDING; //默认状态 等待态
@@ -56,22 +93,61 @@ class Promise{
         
     }
     then(onfulfilled,onrejected){
-        if(this.status === RESOLVED){
-            onfulfilled(this.value)
-        }
-        if(this.status === REJECTED){
-            onrejected(this.reason)
-        }
-        if(this.status === PENDING){
-            //这时候executor是肯定有异步逻辑,那就用2个数组分别把成功和失败的回调放入数组里面，形成一个队列回调
-            this.onResolvedCallbacks.push(()=>{
-                // TODO...切片编程
-                onfulfilled(this.value);
-            });
-            this.onRejectedCallbacks.push(() => {
-                onrejected(this.reason);
-            });
-        }
+        let promise2 = new Promise((resolve,reject)=>{
+
+            if(this.status === RESOLVED){
+                // 执行then中的方法 可能返回是一个普通值或promise
+                //我们要判断x的类型，如果是promise的话，需要让这个promise执行，并且采用它的状态 作为promise的成功或者失败
+                setTimeout(()=>{
+                    try {
+                        let x =  onfulfilled(this.value)
+                        // console.log(x);
+                        // resolve(x);
+                        resolvePromise(promise2,x,resolve,reject);
+                    } catch (e) {//一旦执行then方法报错，就走到外层then方法的错误处理中，调用promise2的reject方法
+                        reject(e);
+                    }
+                },0)
+             }
+             if(this.status === REJECTED){
+               setTimeout(()=>{
+                try {
+                    let x =  onrejected(this.reason);
+                   // resolve(x);//如果then返回的是一个普通值(不管是成功或失败)就走成功，都要resolve出去
+                   resolvePromise(promise2,x,resolve,reject);
+                } catch (e) {
+                    reject(e);
+                }
+               },0)
+             }
+             if(this.status === PENDING){
+                 //这时候executor是肯定有异步逻辑,那就用2个数组分别把成功和失败的回调放入数组里面，形成一个队列回调
+                 this.onResolvedCallbacks.push(()=>{
+                     // TODO...切片编程
+                     setTimeout(()=>{
+                        try {
+                            let x =  onfulfilled(this.value);
+                            resolvePromise(promise2,x,resolve,reject);
+                        } catch (e) {
+                            reject(e);
+                        }
+                     },0)
+                 });
+                 this.onRejectedCallbacks.push(() => {
+                   setTimeout(()=>{
+                    try {
+                        let x =  onrejected(this.reason);
+                        resolvePromise(promise2,x,resolve,reject);
+                    } catch (e) {
+                        reject(e);
+                    }
+                   },0)
+                 });
+             }
+
+        });
+       
+        return promise2;
     }
 
 }
