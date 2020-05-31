@@ -8,7 +8,7 @@
 let Promise = require('./promise');
 
 const promise = new Promise((resolve,reject)=>{
-    resolve('hello')
+    // resolve('hello')
 })
 
 // let p =promise.then(()=>{
@@ -19,23 +19,54 @@ const promise = new Promise((resolve,reject)=>{
 //这是then两次的结果
 
 // 因为调用了resolve（‘hello'） 所以在then会拿到data数据
-let promise2 = promise.then((data)=>{
-    throw new Error();
-    return 100; // promise.resovle(100)
+let promise2 = promise.then(()=>{
+    // return 100; // promise.resovle(100)
     //(100)
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            resolve(new Promise((resolve,reject)=>{
+                setTimeout(()=>{
+                    reject('hello');
+                },1000)
+            }))
+        },1000)
+    })
 })
 
-promise2.then((data)=>{
-    console.log(data,'data');
-})
-
-
-//1.step引用同一个对象
-
-let p2 = promise.then(()=>{
-    return p2;
-})
-
-p2.then(()=>{},err=>{
+// promise2.then((data)=>{
+//     // console.log(data,'data');
+//     // return 100;
+//     return new Promise((resolve,reject)=>{
+//         setTimeout(()=>{
+//             resolve(new Promise((resolve,reject)=>{
+//                 setTimeout(()=>{
+//                     resolve('hello');
+//                 },1000)
+//             }))
+//         },1000)
+//     })
+// })
+//then没传参数 默认就是
+// function(data){
+//     return data;
+// }
+// promise2.then(function(data){
+//     return data;
+// }).then(function(data){return data;}).then((data)=>{
+//     console.log(data)
+// },err=>{
+//     throw err
+//     console.log(err);
+// })
+promise2.then().then().then((data)=>{
+    console.log('sss'+data)
+},err=>{
     console.log(err);
 })
+//1.step引用同一个对象
+
+// let p2 = promise.then(()=>{
+//     return p2;
+// })
+
+// console.log(111)
