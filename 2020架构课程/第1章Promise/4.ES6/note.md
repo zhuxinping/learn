@@ -24,3 +24,23 @@ export {y} from './y'
 
 
 ```
+
+### 简单回顾
+##### 变量声明var、let、const
+##### 解构赋值、展开运算符
+##### map、set、weakMap、weakSet
+##### defineProperty proxy reflect
+##### ESModule的import export
+##### es5中类的使用 用ES5模拟ES6的类
+#####  es6的基本使用
+
+### 今日任务
+##### 类的继承(原型链) (装饰器)
+##### 数组reduce方法 实现compose redux
+##### 实现模板引擎  面试
+##### 箭头函数
+#### new的原理  尝试实现reduce
+
+
+
+

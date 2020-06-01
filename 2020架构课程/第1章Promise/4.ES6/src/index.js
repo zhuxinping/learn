@@ -88,3 +88,39 @@
 
 
 
+class Animal{
+    constructor(name){
+        this.name = name
+    }
+    say(){
+        console.log('say');
+    }
+    static a(){
+        return 1200;
+    }
+}
+
+class Tiger extends Animal{
+    constructor(name){
+        super(name);//Animal.call(this)
+    }
+    say(){
+        console.log(this);
+        super.say();//Animal.prototype 父类的原型
+    }
+    static get a(){
+        // console.log(super);
+    }
+    static a(){
+        // 静态方法的super指向父类
+        return super.a()
+    }
+}
+
+let tiger = new Tiger('老虎');
+
+console.log(tiger);
+console.log(Tiger.a())
+
+//抽象类  可以被继承 但是不能被new
+
