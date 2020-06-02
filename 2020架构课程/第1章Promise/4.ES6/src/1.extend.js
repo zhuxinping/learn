@@ -63,3 +63,12 @@ function create(parentPrototype) {
 // console.log(Animal.prototype.constructor === Animal);
 // ES6的类 实现继承 是靠call+Object.create = extends
 
+function mycreate(parentPrototype) {
+    function Fn() {
+        
+    }
+    Fn.prototype = parentPrototype;
+    return new Fn();
+}
+ Tiger.prototype = mycreate(Animal.prototype)
+
