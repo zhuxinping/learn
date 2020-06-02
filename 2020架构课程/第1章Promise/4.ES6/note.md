@@ -43,4 +43,11 @@ export {y} from './y'
 
 
 
+#### 常见数据结果  Symbol的11种原编程方法
+#### Reflect用法
+#### call bind apply
 
+#### node基础  事件环commonjs
+
+#### vue全家桶 (三周)
+#### node 讲完  +webpack+react
