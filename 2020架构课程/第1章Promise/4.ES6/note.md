@@ -51,3 +51,13 @@ export {y} from './y'
 
 #### vue全家桶 (三周)
 #### node 讲完  +webpack+react
+
+#### node核心  模块  npm buffer （arrayBuffer）
+
+#### 文件操作  流  文件夹的操作  http模块
+
+##### koa用法和原理  (cookie session jwt) express
+
+#####  node进程  集群  pm2 mongo +redis
+
+

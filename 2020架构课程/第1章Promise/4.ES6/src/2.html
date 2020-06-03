@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="wwww.baidu.com" id="link">1</a>
+</body>
+<script>
+    let link = document.getElementById('link');
+    link.addEventListener('click',(e)=>{//
+        // Promise.resolve().then(()=>{
+        //     e.preventDefault();
+        // });//不会跳转
+        // setTimeout(()=>{
+        //     e.preventDefault();
+        // },0) 会跳转
+    })
+
+
+const nextTick = new Promise((resolve,reject)=>{
+    link.addEventListener('click',resolve);
+});
+nextTick.then(event=>{
+    event.preventDefault();
+    console.log('ds');
+});
+link.click();//会立即调用resolve  2个宏任务 第二个宏任务会让其跳转
+
+</script>
+</html>
