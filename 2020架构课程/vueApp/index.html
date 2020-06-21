@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>vueapp</title>
+    <style>
+      .box{
+        height: 100px;
+        overflow: scroll;
+      }
+      .box li{
+        height: 40px;
+       
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!--静态节点，稍后渲染时，不会重新渲染 有缓存-->
+      <!--指令对应的值都是变量-->
+      <!-- v-html innerHTML 会转化为标签插入 xss攻击-->
+      <!-- <div v-html="html"></div> -->
+      <!--会有xss攻击 -->
+      <!-- <input type="text" v-model="html"> -->
+      <!-- <div v-once>{{b}}{{arr}}</div> -->
+      <!-- v-if里面的值是变量-->
+      <!-- <div v-if="true">helll111</div>
+      <template v-if>hello</template>
+      <template v-else>world</template>
+      <div v-show="true">1234</div> -->
+      <!-- <div v-for></div> 循环  数组 对象 字符串 数字-->
+      <!-- v-for  v-if 不能连用 -->
+      <!-- v-for  v-if优先级  先循环 在判断  尽量使用计算属性来解决这个问题-->
+      <!-- <div v-for="(item,index) of arr" :key="index">{{item}}</div> -->
+      
+      <!-- key  尽量不要使用索引作为key  尤其是经常操作的列表 -->
+      <!--- 减少没必要的dom操作 -->
+      <!--  display:none; 不占位   占位opacity visibility:hidden; v-show指令最终会通过样式来控制这个div是显示还是隐藏  自定义指令 -->
+      <!-- 最终会编译成render函数 -->
+      <!--- v-if / v-else-if  相当于三元表达式 -->
+     <!-- <div v-click-outside="blur">
+      <input type="text" @focus="focus">
+      <div v-show="active">面包</div>
+     </div> -->
+     <ul class="box">
+       <li v-for="(img,index) in imgs" :key="img">
+         {{index}}
+          <img v-lazy="img" alt="">
+       </li>
+     </ul>
+    </div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
